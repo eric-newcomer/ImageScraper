@@ -1,11 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+import sys
+import imgaug as ia
 from imgaug import augmenters as iaa
 import cv2 as cv
 
-# Set image augmentation seed
-ia.seed(1)
 
 def image_download(url, folder, site=None):
    if not os.path.isdir(os.path.join(os.getcwd(), folder)):
@@ -32,11 +32,20 @@ def image_download(url, folder, site=None):
    os.chdir('..')
 
 def augment_images(dir):
+   # Set image augmentation seed
+   ia.seed(1)
    seq = iaa.Sequential([
-      iaa.Crop(px=(0, 16)), # crop images from each side by 0 to 16px (randomly chosen)
+      iaa.Crop(percent=(0, 0.1)), # crop images from each side by 0 to 10% (randomly chosen)
       iaa.Fliplr(0.5), # horizontally flip 50% of the images
-      iaa.GaussianBlur(sigma=(0, 0.5)) # blur images with a sigma of 0 to 3.0
-   ])
+       # Small gaussian blur with random sigma between 0 and 0.5.
+      # But we only blur about 50% of all images.
+      iaa.Sometimes(
+         0.5,
+         iaa.GaussianBlur(sigma=(0, 0.5))
+      ),
+       # Strengthen or weaken the contrast in each image.
+    iaa.LinearContrast((0.75, 1.5))
+   ], random_order=True)
    img_array = []
    for f in os.listdir("./"+dir):
       print(f)
@@ -48,10 +57,9 @@ def augment_images(dir):
    for im in images_aug:
       cv.imshow("aug", im)
       cv.waitKey()
-   
 
 
-def main():
+def init_image_download():
    # Personal ".org" websites
    pollock_url = "https://www.jackson-pollock.org/jackson-pollock-paintings.jsp"
    rothko_url = "https://www.mark-rothko.org/mark-rothko-paintings.jsp"
@@ -66,20 +74,28 @@ def main():
    newman_url_a_to_z = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=6"
    newman_url_z_to_a = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=7"
    newman_url_descending = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=12"
-   #image_download(pollock_url, "pollock_images", "https://www.jackson-pollock.org/")
-   #image_download(rothko_url, "rothko_images", "https://www.mark-rothko.org/")
-   #image_download(kooning_url,"kooning_images", "https://www.dekooning.org/")
+   image_download(pollock_url, "pollock_images", "https://www.jackson-pollock.org/")
+   image_download(rothko_url, "rothko_images", "https://www.mark-rothko.org/")
+   image_download(kooning_url,"kooning_images", "https://www.dekooning.org/")
   
-   # image_download(mitchell_url_recently_added, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
-   # image_download(mitchell_url_a_to_z, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
-   # image_download(mitchell_url_z_to_a, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
-   # image_download(mitchell_url_z_to_a, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
+   image_download(mitchell_url_recently_added, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
+   image_download(mitchell_url_a_to_z, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
+   image_download(mitchell_url_z_to_a, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
+   image_download(mitchell_url_z_to_a, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
    
-   #image_download(newman_url_recently_added, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
-   #image_download(newman_url_a_to_z, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
-   #image_download(newman_url_z_to_a, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
-   #image_download(newman_url_descending, "newman_images",  "http://www.artnet.com/artists/barnett-newman/")
-   augment_images("newman_images")
+   image_download(newman_url_recently_added, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
+   image_download(newman_url_a_to_z, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
+   image_download(newman_url_z_to_a, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
+   image_download(newman_url_descending, "newman_images",  "http://www.artnet.com/artists/barnett-newman/")
+   #clean_folders()
+
+
+
+def main(download=False):
+   if download == True:
+      init_image_download() 
+   
+   augment_images("pollock_images")
    
 
 if __name__ == "__main__":
