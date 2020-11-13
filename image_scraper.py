@@ -87,22 +87,28 @@ def augment_images(dir):
          iaa.GaussianBlur(sigma=(0, 0.5))
       ),
        # Strengthen or weaken the contrast in each image.
-    iaa.LinearContrast((0.75, 1.5))
+      iaa.LinearContrast((0.75, 1.5)),
+      # Make some images brighter and some darker.
+      # In 20% of all cases, we sample the multiplier once per channel,
+      # which can end up changing the color of the images.
+      iaa.Multiply((0.8, 1.2), per_channel=0.2),
+      iaa.Affine(
+         scale={"x": (1.0, 1.2), "y": (1.0, 1.2)}
+      )
    ], random_order=True)
    img_array = []
    for f in os.listdir("./"+dir):
       print(f)
       img = cv.imread(dir+"/"+f, cv.IMREAD_COLOR)
-      cv.imshow("window", img)
-      cv.waitKey()
+      # cv.imshow("window", img)
+      # cv.waitKey()
       img_array.append(img)
    images_aug = seq(images=img_array)
    for im in images_aug:
       cv.imshow("aug", im)
-      cv.waitKey()
-
-
-
+      if cv.waitKey() == ord('q'):
+         cv.destroyAllWindows()
+         exit()
 
 def main(download=False):
    if download == True:
