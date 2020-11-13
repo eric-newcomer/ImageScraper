@@ -7,6 +7,49 @@ from imgaug import augmenters as iaa
 import cv2 as cv
 
 
+def init_image_download():
+   # Personal ".org" websites
+   pollock_url = "https://www.jackson-pollock.org/jackson-pollock-paintings.jsp"
+   rothko_url = "https://www.mark-rothko.org/mark-rothko-paintings.jsp"
+   kooning_url = "https://www.dekooning.org/the-artist/artworks/view/all?view_all=1"
+   
+   # Art Net websites
+   mitchell_url_recently_added = "http://www.artnet.com/artists/joan-mitchell/?type=paintings"
+   mitchell_url_a_to_z = "http://www.artnet.com/artists/joan-mitchell/?type=paintings&sort=6"
+   mitchell_url_z_to_a = "http://www.artnet.com/artists/joan-mitchell/?type=paintings&sort=7"
+   mitchell_url_descending = "http://www.artnet.com/artists/joan-mitchell/?type=paintings&sort=12"
+   newman_url_recently_added = "http://www.artnet.com/artists/barnett-newman/?type=paintings"
+   newman_url_a_to_z = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=6"
+   newman_url_z_to_a = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=7"
+   newman_url_descending = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=12"
+   shiraga_url_recently_added = "http://www.artnet.com/artists/kazuo-shiraga/?type=paintings"
+   shiraga_url_a_to_z = "http://www.artnet.com/artists/kazuo-shiraga/?type=paintings&sort=6"
+   shiraga_url_z_to_a = "http://www.artnet.com/artists/kazuo-shiraga/?type=paintings&sort=7"
+   shiraga_url_descending = "http://www.artnet.com/artists/kazuo-shiraga/?type=paintings&sort=12"
+
+   image_download(pollock_url, "pollock_images", "https://www.jackson-pollock.org/")
+   image_download(rothko_url, "rothko_images", "https://www.mark-rothko.org/")
+   image_download(kooning_url,"kooning_images", "https://www.dekooning.org/")
+  
+   image_download(mitchell_url_recently_added, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
+   image_download(mitchell_url_a_to_z, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
+   image_download(mitchell_url_z_to_a, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
+   image_download(mitchell_url_z_to_a, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
+   
+   image_download(newman_url_recently_added, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
+   image_download(newman_url_a_to_z, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
+   image_download(newman_url_z_to_a, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
+   image_download(newman_url_descending, "newman_images",  "http://www.artnet.com/artists/barnett-newman/")
+   
+   image_download(shiraga_url_recently_added, "shiraga_images", "http://www.artnet.com/artists/kazuo-shiraga/")
+   image_download(shiraga_url_a_to_z, "shiraga_images", "http://www.artnet.com/artists/kazuo-shiraga/")
+   image_download(shiraga_url_z_to_a, "shiraga_images", "http://www.artnet.com/artists/kazuo-shiraga/")
+   image_download(shiraga_url_descending , "shiraga_images", "http://www.artnet.com/artists/kazuo-shiraga/")
+
+   #clean_folders()
+
+
+
 def image_download(url, folder, site=None):
    if not os.path.isdir(os.path.join(os.getcwd(), folder)):
       os.mkdir(os.path.join(os.getcwd(), folder))
@@ -59,43 +102,13 @@ def augment_images(dir):
       cv.waitKey()
 
 
-def init_image_download():
-   # Personal ".org" websites
-   pollock_url = "https://www.jackson-pollock.org/jackson-pollock-paintings.jsp"
-   rothko_url = "https://www.mark-rothko.org/mark-rothko-paintings.jsp"
-   kooning_url = "https://www.dekooning.org/the-artist/artworks/view/all?view_all=1"
-   
-   # Art Net websites
-   mitchell_url_recently_added = "http://www.artnet.com/artists/joan-mitchell/?type=paintings"
-   mitchell_url_a_to_z = "http://www.artnet.com/artists/joan-mitchell/?type=paintings&sort=6"
-   mitchell_url_z_to_a = "http://www.artnet.com/artists/joan-mitchell/?type=paintings&sort=7"
-   mitchell_url_descending = "http://www.artnet.com/artists/joan-mitchell/?type=paintings&sort=12"
-   newman_url_recently_added = "http://www.artnet.com/artists/barnett-newman/?type=paintings"
-   newman_url_a_to_z = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=6"
-   newman_url_z_to_a = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=7"
-   newman_url_descending = "http://www.artnet.com/artists/barnett-newman/?type=paintings&sort=12"
-   image_download(pollock_url, "pollock_images", "https://www.jackson-pollock.org/")
-   image_download(rothko_url, "rothko_images", "https://www.mark-rothko.org/")
-   image_download(kooning_url,"kooning_images", "https://www.dekooning.org/")
-  
-   image_download(mitchell_url_recently_added, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
-   image_download(mitchell_url_a_to_z, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
-   image_download(mitchell_url_z_to_a, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
-   image_download(mitchell_url_z_to_a, "mitchell_images", "http://www.artnet.com/artists/joan-mitchell/")
-   
-   image_download(newman_url_recently_added, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
-   image_download(newman_url_a_to_z, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
-   image_download(newman_url_z_to_a, "newman_images", "http://www.artnet.com/artists/barnett-newman/")
-   image_download(newman_url_descending, "newman_images",  "http://www.artnet.com/artists/barnett-newman/")
-   #clean_folders()
-
 
 
 def main(download=False):
    if download == True:
       init_image_download() 
    
-   augment_images("pollock_images")
+   augment_images("shiraga_images")
    
 
 if __name__ == "__main__":
