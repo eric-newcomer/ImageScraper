@@ -46,9 +46,17 @@ def init_image_download():
    image_download(shiraga_url_z_to_a, "shiraga_images", "http://www.artnet.com/artists/kazuo-shiraga/")
    image_download(shiraga_url_descending , "shiraga_images", "http://www.artnet.com/artists/kazuo-shiraga/")
 
-   #clean_folders()
+   clean_folders()
 
-
+def clean_folders():
+   for dirpath, subdirs, files in os.walk('.'):
+      for sub in subdirs:
+         if "_images" in sub:
+            for dirpath2, subdirs2, files2 in os.walk(sub):
+               for f in files2:
+                  if "png" in f and "jpg" in f:
+                     toRemove = dirpath+"/"+dirpath2+"/"+f
+                     os.remove(toRemove)
 
 def image_download(url, folder, site=None):
    if not os.path.isdir(os.path.join(os.getcwd(), folder)):
@@ -113,7 +121,6 @@ def augment_images(dir):
 def main(download=False):
    if download == True:
       init_image_download() 
-   
    augment_images("shiraga_images")
    
 
